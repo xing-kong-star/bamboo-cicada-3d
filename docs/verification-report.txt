@@ -1,0 +1,49 @@
+竹知了 3D · 自动验收报告
+时间：2026-11-06T08:40:25.139Z
+
+PASS 初始界面加载 — {"bestTime":0,"bestScore":0,"bestRpm":0,"runs":0}
+PASS 进入竹林并唤醒音频 — running
+PASS 像素比不超过 1.5 — dpr=0.84
+PASS 默认流畅模式使用 720p 像素预算 — 920212 px
+PASS 4K 窗口自动降采样 — ratio=0.33
+PASS Draw call 已大幅削减 — 54 calls
+PASS 默认使用轻量性能模式 — performance
+PASS 空闲帧率限制为 30fps — 30 target / 30.3 measured
+PASS 静止时完全静音 — rms=0.00e+0
+PASS 响度随转速单调上升 — 0.000 < 0.005 < 0.043 < 0.103 < 0.158 < 0.201 < 0.224
+PASS 基频随转速单调上升 — 3 < 132 < 202 < 366 < 586 < 885 < 1031
+PASS 高频亮度随转速提升 — 1349 → 4633 Hz
+PASS 包含低频“哇呜”调制 — depth=0.89, 2.5Hz
+PASS 默认流畅模式锁定 30fps — 30 target / 29.7 measured
+PASS 实时声音随转速出现 — -14.9 dB
+PASS 转速归零后声音自然衰减 — -67.5 dB
+PASS 可切换到高画质 + AfterimagePass — quality
+PASS 高画质模式锁定 60fps — 60 target / 60.1 measured
+PASS 高画质仍限制 1080p — 1296000 px
+PASS 可切回流畅模式 — performance
+PASS 空气阻力使转速自然衰减 — 3169 RPM
+PASS 挑战计时实时增长 — 2.11s
+PASS 挑战实时计分 — 394 分
+PASS 蝉鸣中断后结束挑战
+PASS 最佳成绩写入记录 — {"bestTime":2.1106000042915323,"bestScore":394,"bestRpm":2600,"runs":1}
+PASS 最佳成绩持久化 — {"bestTime":2.1106000042915323,"bestScore":394,"bestRpm":2600,"runs":1}
+PASS 鼠标搓动驱动转速 — 4425 RPM
+PASS 触摸搓动驱动转速 — 3634 RPM
+PASS 键盘搓动驱动转速 — 1243 RPM
+PASS 切到后台暂停渲染循环 — {"loop":false,"audio":"suspended"}
+PASS 切到后台暂停音频 — suspended
+PASS 返回前台恢复渲染
+PASS 打开帮助时暂停渲染
+PASS 关闭帮助后恢复渲染
+PASS 打开手势面板不会偷偷启动摄像头 — 摄像头与 MediaPipe 默认关闭；点击下方按钮才会启动（15fps）。
+PASS MediaPipe Hands 摄像头管线启动 — {"running":true,"fps":15,"badge":"寻找手掌","placeholderHidden":true,"status":"寻找手掌…把手掌放进画面，左右搓动"}
+PASS MediaPipe 读取限制 15fps — 15fps
+PASS 摄像头预览不再遮挡 — 寻找手掌
+PASS 摄像头手掌搓动转化为角速度 — 5160 RPM
+PASS 刷新后仍保留最佳成绩 — {"bestTime":2.1106000042915323,"bestScore":394,"bestRpm":2600,"runs":1}
+PASS 手机端实时得分可见 — {"scoreDisplay":"flex","shakeDisplay":"flex","speedBottom":832,"viewport":844,"overflowX":false}
+PASS 手机端布局无横向溢出
+PASS 摇一摇给竹翼加速 — 3389 RPM
+PASS 无页面脚本错误
+
+全部通过

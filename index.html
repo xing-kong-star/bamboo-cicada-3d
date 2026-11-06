@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#18241c" />
+  <meta name="description" content="竹知了 3D 仿真：搓动竹签，让竹翼旋转，听见夏天。支持鼠标、触屏、摇一摇与摄像头手势。" />
+  <title>竹知了 · 3D 夏日蝉鸣</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23a8432d'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-size='40' font-family='serif' fill='%23f6e7c8'%3E蝉%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="css/style.css?v=20261106-2" />
+</head>
+<body>
+  <div id="app" class="app is-intro">
+    <div class="scene-wrap" id="scene-wrap">
+      <canvas id="scene-canvas" aria-label="竹知了 3D 场景"></canvas>
+    </div>
+
+    <header class="topbar chrome" id="topbar">
+      <div class="brand">
+        <span class="brand-seal" aria-hidden="true">蝉</span>
+        <div class="brand-text">
+          <strong>竹知了</strong>
+          <span>夏日蝉鸣 · 3D</span>
+        </div>
+      </div>
+      <nav class="top-actions" aria-label="页面工具">
+        <button class="icon-btn" id="btn-sound" type="button" aria-label="关闭声音" title="声音">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.2-3.87v7.74A4.5 4.5 0 0 0 16.5 12zm-2.2-8.1v2.06a7 7 0 1 1 0 12.08v2.06a9 9 0 1 0 0-16.2z"/></svg>
+          <span class="btn-label">声音</span>
+        </button>
+        <button class="icon-btn" id="btn-camera" type="button" aria-label="摄像头手势控制" title="手势">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a4 4 0 0 0-4 4v1H6a2 2 0 0 0-2 2v2H2v7a4 4 0 0 0 4 4h12a4 4 0 0 0 4-4v-7h-2V9a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4zm-2 4a2 2 0 1 1 4 0v7h2V9h1v12H6a2 2 0 0 1-2-2v-5h2v4h2V8h2V6z"/></svg>
+          <span class="btn-label">手势</span>
+        </button>
+        <button class="icon-btn" id="btn-quality" type="button" aria-label="切换高画质" aria-pressed="false" title="画质：流畅">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-9 9c0 3.6 2.1 6.7 5.1 8.2l.9-1.8A7 7 0 1 1 19 12h2a9 9 0 0 0-9-9zm0 4a5 5 0 0 0-5 5c0 1.6.7 3 1.9 4l1.4-1.4A3 3 0 1 1 15 12h-3l-4 8h2.2l2.5-5H16a5 5 0 1 0-4-8z"/></svg>
+          <span class="btn-label" id="quality-label">流畅</span>
+        </button>
+        <button class="icon-btn" id="btn-shake" type="button" aria-label="开启摇一摇" title="摇一摇">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm0 3v12h10V6H7zm2 14h6v1H9v-1zM2 9h2v6H2V9zm18 0h2v6h-2V9z"/></svg>
+          <span class="btn-label">摇一摇</span>
+        </button>
+        <button class="icon-btn" id="btn-help" type="button" aria-label="玩法说明" title="玩法">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm1-5h-2v2h2v-2zm-1-9a4 4 0 0 0-4 4h2a2 2 0 1 1 3.2 1.6c-1.1.82-2.2 1.6-2.2 3.4h2c0-.9.6-1.36 1.5-2.03A3.98 3.98 0 0 0 12 6z"/></svg>
+          <span class="btn-label">玩法</span>
+        </button>
+      </nav>
+    </header>
+
+    <section class="challenge-card glass chrome" id="challenge-card" aria-label="蝉鸣挑战">
+      <div class="challenge-head">
+        <span class="eyebrow"><i class="live-dot" id="live-dot"></i> 蝉鸣挑战</span>
+        <span class="challenge-best">最佳 <b id="best-time">--</b></span>
+      </div>
+      <div class="challenge-main">
+        <div class="challenge-time"><b id="sing-time">0.0</b><span>秒</span></div>
+        <div class="challenge-score">
+          <span>本局得分</span>
+          <b id="score">0</b>
+        </div>
+      </div>
+      <div class="challenge-meta">
+        <span id="challenge-state">自由练习 · 不计分</span>
+        <span class="combo" id="combo">×1.0</span>
+      </div>
+      <div class="challenge-progress"><i id="challenge-progress"></i></div>
+      <div class="challenge-actions">
+        <button class="btn btn-solid" id="btn-challenge" type="button">开始挑战</button>
+        <button class="btn btn-ghost" id="btn-reset" type="button" hidden>重来</button>
+      </div>
+    </section>
+
+    <aside class="gesture-panel glass chrome" id="gesture-panel" hidden aria-label="摄像头手势控制">
+      <div class="panel-head">
+        <div>
+          <span class="eyebrow">MediaPipe Hands</span>
+          <h2>用手掌搓风</h2>
+        </div>
+        <button class="panel-close" id="btn-gesture-close" type="button" aria-label="关闭手势面板">×</button>
+      </div>
+      <div class="gesture-video-shell">
+        <video id="gesture-video" playsinline autoplay muted></video>
+        <canvas id="gesture-overlay" width="640" height="480"></canvas>
+        <div class="gesture-placeholder" id="gesture-placeholder">
+          <span class="hand-glyph">☝</span>
+          <p>开启摄像头后<br>对着镜头左右搓动手掌</p>
+        </div>
+        <div class="gesture-badge" id="gesture-badge">摄像头未开启</div>
+      </div>
+      <div class="gesture-status" id="gesture-status">画面仅在本地处理，不会上传。</div>
+      <div class="gesture-meter" aria-hidden="true"><i id="gesture-fill"></i></div>
+      <button class="btn btn-solid full" id="btn-camera-start" type="button">开启摄像头</button>
+    </aside>
+
+    <section class="speed-panel chrome" id="speed-panel" aria-label="实时转速与声音">
+      <div class="gauge-wrap">
+        <svg class="gauge" viewBox="0 0 220 220" aria-hidden="true">
+          <defs>
+            <linearGradient id="gaugeGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#87a76a"/>
+              <stop offset="55%" stop-color="#e3b75d"/>
+              <stop offset="100%" stop-color="#c84f32"/>
+            </linearGradient>
+            <filter id="gaugeGlow" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <path class="gauge-track" d="M 45 175 A 84 84 0 1 1 175 175" />
+          <path class="gauge-value" id="gauge-value" d="M 45 175 A 84 84 0 1 1 175 175" />
+          <g class="gauge-ticks" id="gauge-ticks"></g>
+          <g class="gauge-needle" id="gauge-needle">
+            <path d="M 110 47 L 114 54 L 110 120 L 106 54 Z" />
+            <circle cx="110" cy="120" r="6" />
+          </g>
+          <circle class="gauge-marker" id="gauge-marker" cx="110" cy="120" r="3"/>
+        </svg>
+        <div class="gauge-readout">
+          <span class="rpm" id="rpm">0</span>
+          <span class="rpm-unit">RPM</span>
+          <span class="sing-state" id="sing-state">静止</span>
+        </div>
+      </div>
+      <div class="sound-strip">
+        <div class="sound-item">
+          <span>音高</span>
+          <b><i id="freq">--</i> Hz</b>
+        </div>
+        <div class="sound-item">
+          <span>响度</span>
+          <b><i id="level">--</i> dB</b>
+        </div>
+        <div class="sound-item sound-state">
+          <span>声场</span>
+          <b id="audio-state">点击唤醒</b>
+        </div>
+      </div>
+    </section>
+
+    <div class="rub-hint chrome" id="rub-hint">
+      <span class="rub-icon" aria-hidden="true">
+        <svg viewBox="0 0 42 30"><path d="M4 15c5-7 10-7 15 0s10 7 15 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M25 3l7 5-8 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span id="rub-hint-text">按住竹签，左右快速搓动</span>
+    </div>
+
+    <div class="hover-tip" id="hover-tip" aria-hidden="true">按住搓动</div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="fps-badge" id="fps-badge" hidden></div>
+
+    <div class="intro" id="intro">
+      <div class="intro-wash" aria-hidden="true"></div>
+      <div class="intro-leaves" aria-hidden="true">
+        <i class="leaf leaf-1"></i><i class="leaf leaf-2"></i><i class="leaf leaf-3"></i>
+        <i class="leaf leaf-4"></i><i class="leaf leaf-5"></i>
+      </div>
+      <div class="intro-card">
+        <div class="intro-seal" aria-hidden="true">蝉</div>
+        <p class="eyebrow">中国传统竹玩具 · 3D 仿真</p>
+        <h1>竹<span>知</span>了</h1>
+        <p class="intro-lede">一根竹签，一片薄竹翼。<br>搓得越快，这个夏天就鸣得越响。</p>
+        <div class="intro-steps">
+          <div class="intro-step">
+            <span class="step-num">一</span>
+            <b>搓动竹签</b>
+            <p>鼠标拖拽 / 手指搓动 / 摇一摇手机</p>
+          </div>
+          <div class="intro-step">
+            <span class="step-num">二</span>
+            <b>听风成蝉</b>
+            <p>转速越高，蝉鸣越亮、越急</p>
+          </div>
+          <div class="intro-step">
+            <span class="step-num">三</span>
+            <b>挑战连鸣</b>
+            <p>让蝉声不断，刷新你的夏日纪录</p>
+          </div>
+        </div>
+        <button class="btn btn-start" id="btn-start" type="button">
+          <span>进入竹林</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <p class="intro-note">建议开启声音 · 支持摄像头手势与体感摇动</p>
+      </div>
+      <footer class="intro-footer">
+        <span>竹知了 · 夏日限定</span>
+        <span>WebGL / Web Audio / MediaPipe Hands</span>
+      </footer>
+    </div>
+
+    <div class="modal-backdrop" id="help-modal" hidden>
+      <div class="modal-card glass" role="dialog" aria-modal="true" aria-labelledby="help-title">
+        <button class="modal-close" data-close="help-modal" type="button" aria-label="关闭">×</button>
+        <span class="eyebrow">玩法与原理</span>
+        <h2 id="help-title">让一片竹子，叫成夏天</h2>
+        <div class="help-grid">
+          <section>
+            <h3>怎么玩</h3>
+            <p>按住中央竹签左右快速搓动，或直接用手掌在镜头前搓动。速度足够时，竹翼切割空气，仿真蝉鸣开始响起。</p>
+            <ul>
+              <li>鼠标：按住竹签拖动；拖空白处旋转视角</li>
+              <li>手机：单指搓动；双指缩放；摇一摇加速</li>
+              <li>键盘：<kbd>←</kbd> <kbd>→</kbd> 交替搓动，<kbd>空格</kbd> 轻甩</li>
+              <li>摄像头：开启手势后，手掌左右搓动</li>
+            </ul>
+          </section>
+          <section>
+            <h3>声音从哪来</h3>
+            <p>竹翼高速旋转时切割空气，薄竹片受气流激励产生弯曲振动，振动通过竹签传到握持处；旋转周期又对振动形成调制，于是听起来像“哇呜——哇呜——”。</p>
+            <p>本作没有使用任何录音。蝉鸣由 Web Audio 实时合成，基频、泛音、气流噪声与周期调制都随实时转速连续变化。</p>
+          </section>
+          <section>
+            <h3>挑战规则</h3>
+            <p>点击“开始挑战”后，把转速保持在 <b>1200 RPM</b> 以上，蝉鸣计时就会增长。速度越高，得分倍率越高；蝉声中断超过 2.2 秒，本局结束。</p>
+            <p>默认使用右上角“<b>流畅</b>”模式：30fps、内部 720p、轻量 GPU 残影。需要更高画质时可切换“高画质”：60fps、1080p、AfterimagePass，但 GPU 负载会明显上升；持续低帧率时会自动切回流畅模式。</p>
+          </section>
+          <section>
+            <h3>物理与隐私</h3>
+            <p>竹翼受到空气阻力与轴摩擦，转速会自然衰减；搓动输入会持续补充角动量。摄像头画面只在浏览器本地由 MediaPipe 处理，不会上传，也不录制。</p>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="result-modal" hidden>
+      <div class="modal-card result-card glass" role="dialog" aria-modal="true" aria-labelledby="result-title">
+        <span class="eyebrow">本局结束</span>
+        <h2 id="result-title">蝉声暂歇</h2>
+        <p class="result-line" id="result-line">再来一次，让夏天响久一点。</p>
+        <div class="result-stats">
+          <div><span>连续蝉鸣</span><b id="result-time">0.0<small>s</small></b></div>
+          <div><span>本局得分</span><b id="result-score">0</b></div>
+          <div><span>最高转速</span><b id="result-rpm">0<small>RPM</small></b></div>
+        </div>
+        <div class="result-best" id="result-best"></div>
+        <div class="modal-actions">
+          <button class="btn btn-solid" id="btn-retry" type="button">再来一局</button>
+          <button class="btn btn-ghost" data-close="result-modal" type="button">自由练习</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading-screen" id="loading-screen">
+      <div class="loading-mark">蝉</div>
+      <p>正在生成竹林…</p>
+      <div class="loading-bar"><i id="loading-bar"></i></div>
+    </div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/three.module.js",
+        "three/addons/": "./vendor/three/addons/"
+      }
+    }
+  </script>
+  <script type="module" src="js/main.js?v=20261106-2"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+node_modules/
+.npm-cache/
+.chrome-profile/
+*.log
+tests/artifacts/
+research/
